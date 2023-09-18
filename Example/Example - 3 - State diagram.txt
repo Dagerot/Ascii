@@ -1,0 +1,29 @@
++---+
+| +-+--------------+
+| | Active         | CpuPin = LOW
+| +-+--------------+
+|   |(!PhaseError)
+| +-+-------------------------+
+| | Active - WaitToBeInactive | CpuPin = LOW
+| +-+---------------+---------+
+|   |(PhaseError)   |(InactiveAllowedBOOL) && (500ms < T)
+|   |             +-+-------------+
+|   |             | Inactive      | CpuPin = HIGH
+|   |             +-+-------------+
+|   |               |(PhaseError) && (!Motor_PwmEnable)
++---+---------------+
+
+┌───┐
+│ ┌─┴──────────────┐
+│ │ Active         │ CpuPin = LOW
+│ └─┬──────────────┘
+│   ▼(!PhaseError)
+│ ┌─┴─────────────────────────┐
+│ │ Active - WaitToBeInactive │ CpuPin = LOW
+│ └─┬───────────────┬─────────┘
+│   ▼(PhaseError)   ▼(InactiveAllowedBOOL) && (500ms < T)
+│   │             ┌─┴─────────────┐
+│   │             │ Inactive      │ CpuPin = HIGH
+│   │             └─┬─────────────┘
+│   │               ▼(PhaseError) && (!Motor_PwmEnable)
+└───┴───────────────┘
