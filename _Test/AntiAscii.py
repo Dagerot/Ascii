@@ -52,6 +52,8 @@ TOKEN_LINE_HORZ     = "-"
 TOKEN_BOLD_HORZ     = "="
 TOKEN_LINE_VERT     = "|"
 TOKEN_BOLD_VERT     = "#"
+TOKEN_DOT_HORZ      = "¨"
+TOKEN_DOT_VERT      = ":"
 TOKEN_CROSS         = "+"
 TOKEN_SMALLER       = "<"
 TOKEN_LARGER        = ">"
@@ -85,6 +87,18 @@ ASCII_b_LINE_HORI_bT_DOWN   = "╦"
 ASCII_b_LINE_HORI_bT_UPP    = "╩"
 ASCII_b_LINE_VERT_bT_LEFT   = "╣"
 ASCII_b_LINE_VERT_bT_RIGHT  = "╠"
+
+ASCII_d_LINE_HORI           = "-"
+ASCII_d_LINE_VERT           = "¦"
+ASCII_d_CROSS               = "+"
+ASCII_d_CORN_UP_LEFT        = "."
+ASCII_d_CORN_UP_RIGHT       = "."
+ASCII_d_CORN_DOWN_LEFT      = "'"
+ASCII_d_CORN_DOWN_RIGHT     = "'"
+ASCII_d_LINE_HORI_dT_DOWN    = "."
+ASCII_d_LINE_HORI_dT_UP      = "'"
+ASCII_d_LINE_VERT_dT_LEFT    = "¦"
+ASCII_d_LINE_VERT_dT_RIGHT   = "¦"
 
 ASCII_CROSS_HORI_b_VERT     = "╫"
 ASCII_CROSS_b_HORI_VERT     = "╪"
@@ -120,7 +134,7 @@ ASCII_BLOCK_HORIZONTAL_MID  = "■"
 ASCII_BLOCK_VERTICAL        = "█"
 
 block_list = (ASCII_BLOCK_HORIZONTAL_MID, ASCII_BLOCK_VERTICAL)
-cross_list = ("┼", "┌", "┐", "└", "┘", "┬", "┴", "┤", "├", "╬", "╔", "╗", "╚", "╝", "╦", "╩", "╣", "╠", "╫", "╪", "╥", "╨", "╢", "╟", "╤", "╧", "╡", "╞", "╒", "╕", "╘", "╛", "╓", "╖", "╙", "╜")
+cross_list = ("┼", "┌", "┐", "└", "┘", "┬", "┴", "┤", "├", "╬", "╔", "╗", "╚", "╝", "╦", "╩", "╣", "╠", "╫", "╪", "╥", "╨", "╢", "╟", "╤", "╧", "╡", "╞", "╒", "╕", "╘", "╛", "╓", "╖", "╙", "╜", "'", ".")
 
 # ----------------------------------------
 def anti_ascii_get_pixel(pixel):
@@ -134,6 +148,8 @@ def anti_ascii_get_pixel(pixel):
     elif ASCII_LINE_VERT == pixel: token = TOKEN_LINE_VERT
     elif ASCII_b_LINE_HORI == pixel: token = TOKEN_BOLD_HORZ
     elif ASCII_b_LINE_VERT == pixel: token = TOKEN_BOLD_VERT
+    elif ASCII_d_LINE_HORI == pixel: token = TOKEN_DOT_HORZ
+    elif ASCII_d_LINE_VERT == pixel: token = TOKEN_DOT_VERT
     elif pixel in block_list: token = TOKEN_SOLID
     return token
 
