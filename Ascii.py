@@ -859,7 +859,7 @@ def print_to_screen(_list):
 
 # -----------------------------
 _name_ = os.path.basename(sys.argv[0])
-_ver_ = '1.0'
+_ver_ = '1.1'
 _use_ = '%(prog)s -i <input file> -o <output file>'
 _note_ = '''
     Genreate UTF-8 graphics from ASCII
