@@ -167,6 +167,10 @@ class Ascii(object):
     TOKEN_DOWN        = "v"
     TOKEN_SOLID       = "¤"
     TOKEN_GND         = "£"
+    TOKEN_PARANTES_LEFT  = "("
+    TOKEN_PARANTES_RIGHT = ")"
+    TOKEN_LABLE_LEFT  = "["
+    TOKEN_LABLE_RIGHT = "]"
     TOKEN_GRAPH_UP    = "/"
     TOKEN_GRAPH_DOWN  = "\\"
 
@@ -241,147 +245,23 @@ class Ascii(object):
     ASCII_BLOCK_HORIZONTAL_MID  = "■"
     ASCII_BLOCK_VERTICAL        = "█"
 
+    ASCII_GRAPH_HI              = "'"
+    ASCII_GRAPH_LO              = "."
+
+
     # -----------------------------
     def __init__(self):
-        self.data_list = list()
-        self.token_arrow_horisontal_list = (self.TOKEN_LEFT, self.TOKEN_RIGHT)
-        self.token_arrow_verical_list = (self.TOKEN_UP, self.TOKEN_DOWN)
-        self.token_line_horisontal_list = (self.TOKEN_HORI_LINE, self.TOKEN_HORI_BOLD, self.TOKEN_HORI_DOTTED, self.TOKEN_CROSS)
-        self.token_line_vertical_list = (self.TOKEN_VERT_LINE, self.TOKEN_VERT_BOLD, self.TOKEN_VERT_DOTTED, self.TOKEN_CROSS)
-        self.token_line_list = (self.TOKEN_HORI_LINE, self.TOKEN_VERT_LINE, self.TOKEN_HORI_BOLD, self.TOKEN_VERT_BOLD, self.TOKEN_HORI_DOTTED, self.TOKEN_VERT_DOTTED, self.TOKEN_CROSS)
-
-        self.line_horisontal_cnxn_list   = (self.TOKEN_HORI_LINE  , self.TOKEN_CROSS, self.TOKEN_LEFT, self.TOKEN_RIGHT, self.TOKEN_SOLID)
-        self.bold_horisontal_cnxn_list   = (self.TOKEN_HORI_BOLD  , self.TOKEN_CROSS)
-        self.dotted_horisontal_cnxn_list = (self.TOKEN_HORI_DOTTED, self.TOKEN_CROSS)
-        self.line_verical_cnxn_list      = (self.TOKEN_VERT_LINE  , self.TOKEN_CROSS, self.TOKEN_UP, self.TOKEN_DOWN, self.TOKEN_SOLID, self.TOKEN_GND)
-        self.bold_verical_cnxn_list      = (self.TOKEN_VERT_BOLD  , self.TOKEN_CROSS)
-        self.dotted_verical_cnxn_list    = (self.TOKEN_VERT_DOTTED, self.TOKEN_CROSS)
-
-        self.cross_connect_vertical_list   = (self.TOKEN_VERT_LINE, self.TOKEN_VERT_BOLD, self.TOKEN_VERT_DOTTED, self.TOKEN_CROSS, self.TOKEN_UP, self.TOKEN_DOWN, self.TOKEN_SOLID, self.TOKEN_GND)
-        self.cross_connect_horisontal_list = (self.TOKEN_HORI_LINE, self.TOKEN_HORI_BOLD, self.TOKEN_HORI_DOTTED, self.TOKEN_CROSS, self.TOKEN_LEFT, self.TOKEN_RIGHT, self.TOKEN_SOLID)
+        self.in_list = list()
+        self.out_list = list()
 
         self.ascii_block_list = (self.ASCII_BLOCK_HORIZONTAL_MID, self.ASCII_BLOCK_VERTICAL)
         self.ascii_cross_list = ("┼", "┌", "┐", "└", "┘", "┬", "┴", "┤", "├", "╬", "╔", "╗", "╚", "╝", "╦", "╩", "╣", "╠", "╫", "╪", "╥", "╨", "╢", "╟", "╤", "╧", "╡", "╞", "╒", "╕", "╘", "╛", "╓", "╖", "╙", "╜", "+")
 
-        self.ascii_arrow_cnxn_left_list  = (
-            self.TOKEN_HORI_LINE, self.TOKEN_CROSS,
-            self.ASCII_LINE_HORI, self.ASCII_CROSS,
-            self.ASCII_CORN_UP_LEFT, self.ASCII_CORN_DOWN_LEFT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_HORI_T_UP,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_HORI_b_VERT,
-            self.ASCII_LINE_HORI_bT_DOWN, self.ASCII_LINE_HORI_bT_UP, self.ASCII_LINE_VERT_bT_RIGHT,
-            self.ASCII_CORN_b_UP_LEFT, self.ASCII_CORN_b_DOWN_LEFT)
-        self.ascii_arrow_cnxn_right_list = (
-            self.TOKEN_HORI_LINE, self.TOKEN_CROSS,
-            self.ASCII_LINE_HORI, self.ASCII_CROSS,
-            self.ASCII_CORN_UP_RIGHT, self.ASCII_CORN_DOWN_RIGHT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_HORI_T_UP,
-            self.ASCII_LINE_VERT_T_LEFT, self.ASCII_CROSS_HORI_b_VERT,
-            self.ASCII_LINE_HORI_bT_DOWN, self.ASCII_LINE_HORI_bT_UP,
-            self.ASCII_LINE_VERT_bT_LEFT, self.ASCII_CORN_b_UP_LEFT, self.ASCII_CORN_b_DOWN_LEFT)
-        self.ascii_arrow_cnxn_over_list  = (
-            self.TOKEN_VERT_LINE, self.TOKEN_CROSS,
-            self.ASCII_LINE_VERT, self.ASCII_CROSS,
-            self.ASCII_CORN_UP_LEFT, self.ASCII_CORN_UP_RIGHT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_VERT_T_LEFT,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_b_HORI_VERT,
-            self.ASCII_b_LINE_HORI_T_DOWN, self.ASCII_b_LINE_VERT_T_LEFT,
-            self.ASCII_b_LINE_VERT_T_RIGHT, self.ASCII_CORN_UP_b_LEFT, self.ASCII_CORN_UP_b_RIGHT)
-        self.ascii_arrow_cnxn_under_list = (
-            self.TOKEN_VERT_LINE, self.TOKEN_CROSS,
-            self.ASCII_LINE_VERT, self.ASCII_CROSS,
-            self.ASCII_CORN_DOWN_LEFT, self.ASCII_CORN_DOWN_RIGHT,
-            self.ASCII_LINE_HORI_T_UP, self.ASCII_LINE_VERT_T_LEFT,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_b_HORI_VERT,
-            self.ASCII_b_LINE_HORI_T_UP, self.ASCII_b_LINE_VERT_T_LEFT,
-            self.ASCII_b_LINE_VERT_T_RIGHT, self.ASCII_CORN_DOWN_b_LEFT, self.ASCII_CORN_DOWN_b_RIGHT)
-
-        self.ascii_solid_hori_list = (self.TOKEN_SOLID, self.ASCII_BLOCK_HORIZONTAL_MID)
-
-        self.ascii_gnd_cnxn_left_list  = (
-            self.TOKEN_HORI_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID,
-            self.ASCII_BLOCK_HORIZONTAL_MID, self.ASCII_LINE_HORI,
-            self.ASCII_CROSS, self.ASCII_CORN_UP_LEFT, self.ASCII_CORN_DOWN_LEFT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_HORI_T_UP,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_HORI_b_VERT,
-            self.ASCII_LINE_HORI_bT_DOWN, self.ASCII_LINE_HORI_bT_UP,
-            self.ASCII_LINE_VERT_bT_RIGHT, self.ASCII_CORN_b_UP_LEFT, self.ASCII_CORN_b_DOWN_LEFT)
-        self.ascii_gnd_cnxn_right_list = (
-            self.TOKEN_HORI_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID,
-            self.ASCII_BLOCK_HORIZONTAL_MID, self.ASCII_LINE_HORI,
-            self.ASCII_CROSS, self.ASCII_CORN_UP_RIGHT, self.ASCII_CORN_DOWN_RIGHT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_HORI_T_UP,
-            self.ASCII_LINE_VERT_T_LEFT, self.ASCII_CROSS_HORI_b_VERT,
-            self.ASCII_LINE_HORI_bT_DOWN, self.ASCII_LINE_HORI_bT_UP,
-            self.ASCII_LINE_VERT_bT_LEFT, self.ASCII_CORN_b_UP_LEFT, self.ASCII_CORN_b_DOWN_LEFT)
-        self.ascii_gnd_cnxn_over_list  = (
-            self.TOKEN_VERT_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID,
-            self.ASCII_BLOCK_VERTICAL, self.ASCII_LINE_VERT,
-            self.ASCII_CROSS, self.ASCII_CORN_UP_LEFT, self.ASCII_CORN_UP_RIGHT,
-            self.ASCII_LINE_HORI_T_DOWN, self.ASCII_LINE_VERT_T_LEFT,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_b_HORI_VERT,
-            self.ASCII_b_LINE_HORI_T_DOWN, self.ASCII_b_LINE_VERT_T_LEFT,
-            self.ASCII_b_LINE_VERT_T_RIGHT, self.ASCII_CORN_UP_b_LEFT, self.ASCII_CORN_UP_b_RIGHT)
-        self.ascii_gnd_cnxn_under_list = (
-            self.TOKEN_VERT_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID,
-            self.ASCII_BLOCK_VERTICAL, self.ASCII_LINE_VERT, self.ASCII_CROSS,
-            self.ASCII_CORN_DOWN_LEFT, self.ASCII_CORN_DOWN_RIGHT,
-            self.ASCII_LINE_HORI_T_UP, self.ASCII_LINE_VERT_T_LEFT,
-            self.ASCII_LINE_VERT_T_RIGHT, self.ASCII_CROSS_b_HORI_VERT,
-            self.ASCII_b_LINE_HORI_T_UP, self.ASCII_b_LINE_VERT_T_LEFT,
-            self.ASCII_b_LINE_VERT_T_RIGHT, self.ASCII_CORN_DOWN_b_LEFT, self.ASCII_CORN_DOWN_b_RIGHT)
-
 
     # -----------------------------
     def clear(self):
-        self.data_list = list()
-
-    ## ----------------------------------------
-    #def is_token_horizontal(pixel):
-    #    token_bool = False
-    #    if pixel in self.token_line_horisontal_list:
-    #        token_bool = True
-    #    return token_bool
-    #
-    #
-    ## ----------------------------------------
-    #def is_token_vertical(pixel):
-    #    token_bool = False
-    #    if pixel in self.token_line_vertical_list
-    #        token_bool = True
-    #    return token_bool
-    #
-    #
-    ## ----------------------------------------
-    #def is_token_cross(pixel):
-    #    token_bool = False
-    #    if (TOKEN_CROSS == pixel):
-    #        token_bool = True
-    #    return token_bool
-    #
-    #
-    ## ----------------------------------------
-    #def is_token_line(pixel):
-    #    token_bool = False
-    #    if pixel in self.token_line_list):
-    #        token_bool = True
-    #    return token_bool
-    #
-    #
-    ## ----------------------------------------
-    #def is_token_horisontal_arrow(pixel):
-    #    token_bool = False
-    #    if pixel in self.token_arrow_horisontal:
-    #        token_bool = True
-    #    return token_bool
-    #
-    #
-    ## ----------------------------------------
-    #def is_token_vertical_arrow(pixel):
-    #    token_bool = False
-    #    if pixel in self.token_arrow_vertical:
-    #        token_bool = True
-    #    return token_bool
+        self.in_list = list()
+        self.out_list = list()
 
 
     # ----------------------------------------
@@ -389,13 +269,13 @@ class Ascii(object):
         '''
         In case of pixel out of matrix: Return TOKEN_SPACE
         '''
-        row_size = len(self.data_list)
+        row_size = len(self.in_list)
         # within matrix height?
         if (0 <= row ) and (row < row_size):
-            col_size = len(str(self.data_list[row]).replace("\n",""))
+            col_size = len(str(self.in_list[row]).replace("\n",""))
             # within matrix width?
             if (0 <= col) and (col < col_size):
-                pixel = self.data_list[row][col]
+                pixel = self.in_list[row][col]
             else:
                 pixel = self.TOKEN_SPACE
         else:
@@ -464,31 +344,38 @@ class Ascii(object):
         ¨       -
         :       ¦
         '''
+        hori_line_list = (self.TOKEN_HORI_LINE  , self.TOKEN_CROSS, self.TOKEN_LEFT, self.TOKEN_RIGHT, self.TOKEN_SOLID)
+        hori_bold_list = (self.TOKEN_HORI_BOLD  , self.TOKEN_CROSS)
+        hori_dots_list = (self.TOKEN_HORI_DOTTED, self.TOKEN_CROSS, self.TOKEN_LEFT, self.TOKEN_RIGHT)
+        vert_line_list = (self.TOKEN_VERT_LINE  , self.TOKEN_CROSS, self.TOKEN_UP, self.TOKEN_DOWN, self.TOKEN_SOLID, self.TOKEN_GND)
+        vert_bold_list = (self.TOKEN_VERT_BOLD  , self.TOKEN_CROSS)
+        vert_dots_list = (self.TOKEN_VERT_DOTTED, self.TOKEN_CROSS, self.TOKEN_UP, self.TOKEN_DOWN)
+
         if self.TOKEN_HORI_BOLD == pixel:
-            if   _dict[RIGHT][0] in self.bold_horisontal_cnxn_list: pixel = self.ASCII_b_LINE_HORI
-            elif _dict[LEFT][0]  in self.bold_horisontal_cnxn_list: pixel = self.ASCII_b_LINE_HORI
+            if   _dict[RIGHT][0] in hori_bold_list: pixel = self.ASCII_b_LINE_HORI
+            elif _dict[LEFT][0]  in hori_bold_list: pixel = self.ASCII_b_LINE_HORI
 
         elif self.TOKEN_HORI_LINE == pixel:
-            if   _dict[RIGHT][0] in self.line_horisontal_cnxn_list: pixel = self.ASCII_LINE_HORI
-            elif _dict[LEFT][0]  in self.line_horisontal_cnxn_list: pixel = self.ASCII_LINE_HORI
+            if   _dict[RIGHT][0] in hori_line_list: pixel = self.ASCII_LINE_HORI
+            elif _dict[LEFT][0]  in hori_line_list: pixel = self.ASCII_LINE_HORI
 
         elif self.TOKEN_VERT_BOLD == pixel:
-            if   _dict[UP][0]   in self.bold_verical_cnxn_list: pixel = self.ASCII_b_LINE_VERT
-            elif _dict[DOWN][0] in self.bold_verical_cnxn_list: pixel = self.ASCII_b_LINE_VERT
+            if   _dict[UP][0]   in vert_bold_list: pixel = self.ASCII_b_LINE_VERT
+            elif _dict[DOWN][0] in vert_bold_list: pixel = self.ASCII_b_LINE_VERT
 
         elif self.TOKEN_VERT_LINE == pixel:
-            if   _dict[UP][0]   in self.line_verical_cnxn_list: pixel = self.ASCII_LINE_VERT
-            elif _dict[DOWN][0] in self.line_verical_cnxn_list: pixel = self.ASCII_LINE_VERT
+            if   _dict[UP][0]   in vert_line_list: pixel = self.ASCII_LINE_VERT
+            elif _dict[DOWN][0] in vert_line_list: pixel = self.ASCII_LINE_VERT
 
         elif self.TOKEN_HORI_DOTTED == pixel:
-            if   _dict[RIGHT][0] in self.dotted_horisontal_cnxn_list: pixel = self.ASCII_d_LINE_HORI
-            elif _dict[LEFT][0]  in self.dotted_horisontal_cnxn_list: pixel = self.ASCII_d_LINE_HORI
+            if   _dict[RIGHT][0] in hori_dots_list: pixel = self.ASCII_d_LINE_HORI
+            elif _dict[LEFT][0]  in hori_dots_list: pixel = self.ASCII_d_LINE_HORI
 
         elif self.TOKEN_VERT_DOTTED == pixel:
-            if   _dict[UP][0]   in self.dotted_verical_cnxn_list: pixel = self.ASCII_d_LINE_VERT
-            elif _dict[DOWN][0] in self.dotted_verical_cnxn_list: pixel = self.ASCII_d_LINE_VERT
+            if   _dict[UP][0]   in vert_dots_list: pixel = self.ASCII_d_LINE_VERT
+            elif _dict[DOWN][0] in vert_dots_list: pixel = self.ASCII_d_LINE_VERT
 
-        # else: Nothing
+        else: pixel = None
         return pixel
 
 
@@ -519,8 +406,11 @@ class Ascii(object):
             elif (DOTS == left) and (DOTS == right) and (DOTS == over) and (DOTS == under): pixel = self.ASCII_d_CROSS           # +
             elif (BLIN == left) and (BLIN == right) and (LINE == over) and (LINE == under): pixel = self.ASCII_CROSS_b_HORI_VERT # ╪
             elif (LINE == left) and (LINE == right) and (BLIN == over) and (BLIN == under): pixel = self.ASCII_CROSS_HORI_b_VERT # ╫
+            elif (DOTS == left) and (DOTS == right) and (LINE == over) and (LINE == under): pixel = self.ASCII_CROSS             # +
+            elif (LINE == left) and (LINE == right) and (DOTS == over) and (DOTS == under): pixel = self.ASCII_CROSS             # +
             else: pixel = 0
             return pixel
+
 
         # ----------------------------------------
         def cross_3_get_pixel(left, right, over, under):
@@ -611,20 +501,44 @@ class Ascii(object):
             elif                    (LINE == right) and (BLIN == over)                    : pixel = self.ASCII_CORN_b_DOWN_LEFT     # ╙
             elif (LINE == left)                     and (BLIN == over)                    : pixel = self.ASCII_CORN_b_DOWN_RIGHT    # ╜
 
+            elif                    (DOTS == right)                    and (LINE == under): pixel = self.ASCII_CORN_UP_LEFT         # ┌
+            elif                    (LINE == right)                    and (DOTS == under): pixel = self.ASCII_CORN_UP_LEFT         # ┌
+            elif (DOTS == left)                                        and (LINE == under): pixel = self.ASCII_CORN_UP_RIGHT        # ┐
+            elif (LINE == left)                                        and (DOTS == under): pixel = self.ASCII_CORN_UP_RIGHT        # ┐
+            elif                    (DOTS == right) and (LINE == over)                    : pixel = self.ASCII_CORN_DOWN_LEFT       # └
+            elif                    (LINE == right) and (DOTS == over)                    : pixel = self.ASCII_CORN_DOWN_LEFT       # └
+            elif (DOTS == left)                     and (LINE == over)                    : pixel = self.ASCII_CORN_DOWN_RIGHT      # ┘
+            elif (LINE == left)                     and (DOTS == over)                    : pixel = self.ASCII_CORN_DOWN_RIGHT      # ┘
+
+
             else: pixel = 0
             return pixel
 
-        if _dict[UP][0] in self.cross_connect_vertical_list:
+        vert_list = (
+            self.TOKEN_VERT_LINE, self.TOKEN_VERT_BOLD, self.TOKEN_VERT_DOTTED,
+            self.TOKEN_CROSS,
+            self.TOKEN_UP, self.TOKEN_DOWN,
+            self.TOKEN_SOLID, self.TOKEN_GND)
+
+        hori_list = (
+            self.TOKEN_HORI_LINE, self.TOKEN_HORI_BOLD, self.TOKEN_HORI_DOTTED,
+            self.TOKEN_CROSS,
+            self.TOKEN_LEFT, self.TOKEN_RIGHT,
+            self.TOKEN_SOLID)
+
+        if _dict[UP][0] in vert_list:
             if   self.TOKEN_VERT_LINE   == _dict[UP][0]: over = LINE  # Line
             elif self.TOKEN_VERT_BOLD   == _dict[UP][0]: over = BLIN  # Bold
             elif self.TOKEN_VERT_DOTTED == _dict[UP][0]: over = DOTS  # Dotted
             elif self.TOKEN_CROSS       == _dict[UP][0]: over = LINE  # +
             elif self.TOKEN_UP          == _dict[UP][0]: over = LINE  # Line
             elif self.TOKEN_SOLID       == _dict[UP][0]: over = LINE  # Line
+            elif self.TOKEN_GRAPH_UP    == _dict[UP][0]: over = LINE  # Line
+            elif self.TOKEN_GRAPH_DOWN  == _dict[UP][0]: over = LINE  # Line
             else:                                   over = LINE  # Line
         else: over = 0
 
-        if _dict[DOWN][0] in self.cross_connect_vertical_list:
+        if _dict[DOWN][0] in vert_list:
             if   self.TOKEN_VERT_LINE   == _dict[DOWN][0]: under = LINE  # Line
             elif self.TOKEN_VERT_BOLD   == _dict[DOWN][0]: under = BLIN  # Bold
             elif self.TOKEN_VERT_DOTTED == _dict[DOWN][0]: under = DOTS  # Dotted
@@ -632,26 +546,32 @@ class Ascii(object):
             elif self.TOKEN_DOWN        == _dict[DOWN][0]: under = LINE  # Line
             elif self.TOKEN_GND         == _dict[DOWN][0]: under = LINE  # Line
             elif self.TOKEN_SOLID       == _dict[DOWN][0]: under = LINE  # Line
+            elif self.TOKEN_GRAPH_UP    == _dict[DOWN][0]: under = LINE  # Line
+            elif self.TOKEN_GRAPH_DOWN  == _dict[DOWN][0]: under = LINE  # Line
             else:                                     under = LINE  # Line
         else: under = 0
 
-        if _dict[LEFT][0] in self.cross_connect_horisontal_list:
+        if _dict[LEFT][0] in hori_list:
             if   self.TOKEN_HORI_LINE   == _dict[LEFT][0]: left = LINE  # Line
             elif self.TOKEN_HORI_BOLD   == _dict[LEFT][0]: left = BLIN  # Bold
             elif self.TOKEN_HORI_DOTTED == _dict[LEFT][0]: left = DOTS  # Dotted
             elif self.TOKEN_CROSS       == _dict[LEFT][0]: left = LINE  # +
             elif self.TOKEN_LEFT        == _dict[LEFT][0]: left = LINE  # Line
             elif self.TOKEN_SOLID       == _dict[LEFT][0]: left = LINE  # Line
+            elif self.TOKEN_GRAPH_UP    == _dict[LEFT][0]: left = LINE  # Line
+            elif self.TOKEN_GRAPH_DOWN  == _dict[LEFT][0]: left = LINE  # Line
             else:                                     left = LINE  # Line
         else: left = 0
 
-        if _dict[RIGHT][0] in self.cross_connect_horisontal_list:
+        if _dict[RIGHT][0] in hori_list:
             if   self.TOKEN_HORI_LINE   == _dict[RIGHT][0]: right = LINE  # Line
             elif self.TOKEN_HORI_BOLD   == _dict[RIGHT][0]: right = BLIN  # Bold
             elif self.TOKEN_HORI_DOTTED == _dict[RIGHT][0]: right = DOTS  # Dotted
             elif self.TOKEN_CROSS       == _dict[RIGHT][0]: right = LINE  # +
             elif self.TOKEN_RIGHT       == _dict[RIGHT][0]: right = LINE  # Line
             elif self.TOKEN_SOLID       == _dict[RIGHT][0]: right = LINE  # Line
+            elif self.TOKEN_GRAPH_UP    == _dict[RIGHT][0]: right = LINE  # Line
+            elif self.TOKEN_GRAPH_DOWN  == _dict[RIGHT][0]: right = LINE  # Line
             else:                                      right = LINE  # Line
         else: right = 0
 
@@ -661,7 +581,8 @@ class Ascii(object):
         if   type(pixel_4) is str: pixel = pixel_4
         elif type(pixel_3) is str: pixel = pixel_3
         elif type(pixel_2) is str: pixel = pixel_2
-        # else: Nothing to do
+
+        else: pixel = None
         return pixel
 
 
@@ -698,7 +619,7 @@ class Ascii(object):
         elif self.TOKEN_HORI_DOTTED == pixel: pixel = self.update_line_to_neighbour_get_pixel(pixel, _dict)  # ¨
         elif self.TOKEN_VERT_DOTTED == pixel: pixel = self.update_line_to_neighbour_get_pixel(pixel, _dict)  # :
         elif self.TOKEN_CROSS       == pixel: pixel = self.update_cross_to_neighbour_get_pixel(pixel, _dict) # "+"
-        # else: Nothing
+        else: pixel = None
         return pixel
 
 
@@ -710,12 +631,12 @@ class Ascii(object):
         |(text)     ▼(text)
         (text)|     (text)▼
         '''
-        line_vert_list = (self.TOKEN_VERT_LINE, self.ASCII_LINE_VERT)
+        vert_list = (self.TOKEN_VERT_LINE)
 
-        if   (self.ASCII_CONDITION_RIGHT == _dict[RIGHT][0]) and (pixel in line_vert_list): pixel = self.ASCII_ARROW_DOWN  # ▼(
-        elif (self.ASCII_CONDITION_LEFT  == _dict[LEFT][0])  and (pixel in line_vert_list): pixel = self.ASCII_ARROW_DOWN  # )▼
+        if   (self.TOKEN_PARANTES_LEFT  == _dict[RIGHT][0]) and (pixel in vert_list): pixel = self.ASCII_ARROW_DOWN  # ▼(
+        elif (self.TOKEN_PARANTES_RIGHT == _dict[LEFT][0])  and (pixel in vert_list): pixel = self.ASCII_ARROW_DOWN  # )▼
 
-        # else: Nothing
+        else: pixel = None
         return pixel
 
 
@@ -730,22 +651,27 @@ class Ascii(object):
         v       ▼
         ^       ▲
         |       │
+        <>      ◄►
         '''
-        if   (self.TOKEN_RIGHT == pixel) and (_dict[LEFT][0]  in self.ascii_arrow_cnxn_left_list) : pixel = self.ASCII_ARROW_RIGHT # ─►
-        elif (self.TOKEN_LEFT  == pixel) and (_dict[RIGHT][0] in self.ascii_arrow_cnxn_right_list): pixel = self.ASCII_ARROW_LEFT  # ◄─
+        vert_list = (self.TOKEN_VERT_LINE, self.TOKEN_CROSS)
+        hori_list = (self.TOKEN_HORI_LINE, self.TOKEN_CROSS)
 
-        elif (self.TOKEN_LEFT  == pixel) and (_dict[LEFT][0]  in self.ascii_arrow_cnxn_left_list) : pixel = self.ASCII_ARROW_LEFT  # ─◄
-        elif (self.TOKEN_RIGHT == pixel) and (_dict[RIGHT][0] in self.ascii_arrow_cnxn_right_list): pixel = self.ASCII_ARROW_RIGHT # ►─
+        if   (self.TOKEN_RIGHT == pixel) and (_dict[LEFT][0]  in hori_list) : pixel = self.ASCII_ARROW_RIGHT # ─►
+        elif (self.TOKEN_LEFT  == pixel) and (_dict[RIGHT][0] in hori_list) : pixel = self.ASCII_ARROW_LEFT  # ◄─
 
-        elif (self.TOKEN_LEFT  == pixel) and (self.TOKEN_RIGHT == _dict[RIGHT][0])                : pixel = self.ASCII_ARROW_LEFT  # ◄►
-        elif (self.TOKEN_RIGHT == pixel) and (self.TOKEN_LEFT  == _dict[LEFT][0])                 : pixel = self.ASCII_ARROW_RIGHT # ◄►
+        elif (self.TOKEN_LEFT  == pixel) and (_dict[LEFT][0]  in hori_list) : pixel = self.ASCII_ARROW_LEFT  # ─◄
+        elif (self.TOKEN_RIGHT == pixel) and (_dict[RIGHT][0] in hori_list) : pixel = self.ASCII_ARROW_RIGHT # ►─
 
-        elif (self.TOKEN_DOWN  == pixel) and (_dict[UP][0]   in self.ascii_arrow_cnxn_over_list) : pixel = self.ASCII_ARROW_DOWN  # ↓
-        elif (self.TOKEN_UP    == pixel) and (_dict[DOWN][0] in self.ascii_arrow_cnxn_under_list): pixel = self.ASCII_ARROW_UP    # ↑
+        elif (self.TOKEN_DOWN  == pixel) and (_dict[UP][0]   in vert_list) : pixel = self.ASCII_ARROW_DOWN   # ↓
+        elif (self.TOKEN_UP    == pixel) and (_dict[DOWN][0] in vert_list) : pixel = self.ASCII_ARROW_UP     # ↑
 
-        elif (self.TOKEN_UP    == pixel) and (_dict[UP][0]   in self.ascii_arrow_cnxn_over_list) : pixel = self.ASCII_ARROW_UP   # ↓
-        elif (self.TOKEN_DOWN  == pixel) and (_dict[DOWN][0] in self.ascii_arrow_cnxn_under_list): pixel = self.ASCII_ARROW_DOWN  # ↑
-        # else: Nothing
+        elif (self.TOKEN_UP    == pixel) and (_dict[UP][0]   in vert_list) : pixel = self.ASCII_ARROW_UP     # ↓
+        elif (self.TOKEN_DOWN  == pixel) and (_dict[DOWN][0] in vert_list) : pixel = self.ASCII_ARROW_DOWN   # ↑
+
+        elif (self.TOKEN_LEFT  == pixel) and (self.TOKEN_RIGHT == _dict[RIGHT][0]) : pixel = self.ASCII_ARROW_LEFT  # ◄►
+        elif (self.TOKEN_RIGHT == pixel) and (self.TOKEN_LEFT  == _dict[LEFT][0])  : pixel = self.ASCII_ARROW_RIGHT # ◄►
+
+        else: pixel = None
         return pixel
 
 
@@ -761,14 +687,16 @@ class Ascii(object):
         #       █
         #       █
         '''
-        if   (self.TOKEN_SOLID == pixel) and (_dict[LEFT][0]  in self.ascii_solid_hori_list): pixel = self.ASCII_BLOCK_HORIZONTAL_MID # ■
-        elif (self.TOKEN_SOLID == pixel) and (_dict[RIGHT][0] in self.ascii_solid_hori_list): pixel = self.ASCII_BLOCK_HORIZONTAL_MID # ■
+        hori_list = (self.TOKEN_SOLID)
+
+        if   (self.TOKEN_SOLID == pixel) and (_dict[LEFT][0]  in hori_list): pixel = self.ASCII_BLOCK_HORIZONTAL_MID # ■
+        elif (self.TOKEN_SOLID == pixel) and (_dict[RIGHT][0] in hori_list): pixel = self.ASCII_BLOCK_HORIZONTAL_MID # ■
 
         # special case
         # single ¤ used for knob
-        elif (self.TOKEN_SOLID == pixel): pixel = self.ASCII_BLOCK_VERTICAL       # █
+        elif (self.TOKEN_SOLID == pixel): pixel = self.ASCII_BLOCK_VERTICAL # █
 
-        # else: Nothing
+        else: pixel = None
         return pixel
 
 
@@ -779,37 +707,84 @@ class Ascii(object):
         -----   -----
         £       ┴   (Ground symbol, vertical capacitor)
         ££      ┤├  (Horizontal capacitor)
-
         '''
+        hori_list = ( self.TOKEN_HORI_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID)
+        vert_list = ( self.TOKEN_VERT_LINE, self.TOKEN_CROSS, self.TOKEN_SOLID)
         # special case
         #if (TOKEN_GND == pixel):  pixel = ASCII_LINE_HORI_T_UP # ┴
+        if   (self.TOKEN_GND == pixel) and (_dict[LEFT][0]  in hori_list): pixel = self.ASCII_LINE_VERT_T_LEFT  # ┤
+        elif (self.TOKEN_GND == pixel) and (_dict[RIGHT][0] in hori_list): pixel = self.ASCII_LINE_VERT_T_RIGHT # ├
+        elif (self.TOKEN_GND == pixel) and (_dict[UP][0]    in vert_list): pixel = self.ASCII_LINE_HORI_T_UP    # ┴
+        elif (self.TOKEN_GND == pixel) and (_dict[DOWN][0]  in vert_list): pixel = self.ASCII_LINE_HORI_T_DOWN  # ┬
 
-        if   (self.TOKEN_GND == pixel) and (_dict[LEFT][0]  in self.ascii_gnd_cnxn_left_list):  pixel = self.ASCII_LINE_VERT_T_LEFT  # ┤
-        elif (self.TOKEN_GND == pixel) and (_dict[RIGHT][0] in self.ascii_gnd_cnxn_right_list): pixel = self.ASCII_LINE_VERT_T_RIGHT # ├
-        elif (self.TOKEN_GND == pixel) and (_dict[UP][0]    in self.ascii_gnd_cnxn_over_list):  pixel = self.ASCII_LINE_HORI_T_UP    # ┴
-        elif (self.TOKEN_GND == pixel) and (_dict[DOWN][0]  in self.ascii_gnd_cnxn_under_list): pixel = self.ASCII_LINE_HORI_T_DOWN  # ┬
+        else: pixel = None
+        return pixel
 
-        # else: Nothing
+
+    # ----------------------------------------
+    def misc_graph_to_ascii_get_pixel(self, pixel, _dict):
+        '''
+        from    to
+        -----   -----
+        //      .'
+        \\      '.
+        '''
+        vert_list = ( self.TOKEN_VERT_LINE, self.TOKEN_CROSS)
+        hori_list = ( self.TOKEN_HORI_LINE, self.TOKEN_CROSS, self.TOKEN_GRAPH_UP, self.TOKEN_GRAPH_DOWN)
+
+        if   (_dict[LEFT][0] == self.TOKEN_GRAPH_UP)    and (self.TOKEN_GRAPH_UP   == pixel)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (_dict[LEFT][0] == self.TOKEN_GRAPH_UP)    and (self.TOKEN_GRAPH_DOWN == pixel)  : pixel = self.ASCII_GRAPH_LO  # .
+        elif (_dict[LEFT][0] == self.TOKEN_HORI_DOTTED) and (self.TOKEN_GRAPH_UP   == pixel)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (_dict[LEFT][0] == self.TOKEN_HORI_DOTTED) and (self.TOKEN_GRAPH_DOWN == pixel)  : pixel = self.ASCII_GRAPH_LO  # .
+        elif (_dict[LEFT][0] == self.TOKEN_GRAPH_DOWN)  and (self.TOKEN_GRAPH_UP   == pixel)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (_dict[LEFT][0] == self.TOKEN_GRAPH_DOWN)  and (self.TOKEN_GRAPH_DOWN == pixel)  : pixel = self.ASCII_GRAPH_LO  # .
+        elif (_dict[LEFT][0] == self.TOKEN_CROSS)       and (self.TOKEN_GRAPH_UP   == pixel)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (_dict[LEFT][0] == self.TOKEN_CROSS)       and (self.TOKEN_GRAPH_DOWN == pixel)  : pixel = self.ASCII_GRAPH_LO  # .
+
+        elif (self.TOKEN_GRAPH_UP   == pixel) and (_dict[RIGHT][0] == self.TOKEN_GRAPH_UP)    : pixel = self.ASCII_GRAPH_LO  # .
+        elif (self.TOKEN_GRAPH_DOWN == pixel) and (_dict[RIGHT][0] == self.TOKEN_GRAPH_UP)    : pixel = self.ASCII_GRAPH_LO  # .
+        elif (self.TOKEN_GRAPH_UP   == pixel) and (_dict[RIGHT][0] == self.TOKEN_HORI_DOTTED) : pixel = self.ASCII_GRAPH_LO  # .
+        elif (self.TOKEN_GRAPH_DOWN == pixel) and (_dict[RIGHT][0] == self.TOKEN_HORI_DOTTED) : pixel = self.ASCII_GRAPH_HI  # '
+        elif (self.TOKEN_GRAPH_UP   == pixel) and (_dict[RIGHT][0] == self.TOKEN_GRAPH_DOWN)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (self.TOKEN_GRAPH_DOWN == pixel) and (_dict[RIGHT][0] == self.TOKEN_GRAPH_DOWN)  : pixel = self.ASCII_GRAPH_HI  # '
+        elif (self.TOKEN_GRAPH_UP   == pixel) and (_dict[RIGHT][0] == self.TOKEN_CROSS)       : pixel = self.ASCII_GRAPH_LO  # .
+        elif (self.TOKEN_GRAPH_DOWN == pixel) and (_dict[RIGHT][0] == self.TOKEN_CROSS)       : pixel = self.ASCII_GRAPH_HI  # '
+
+        elif (_dict[UP][0]   in vert_list) and (self.TOKEN_CROSS == pixel) and  (_dict[RIGHT][0] == self.TOKEN_GRAPH_UP)   : pixel = self.ASCII_CORN_DOWN_LEFT  # └
+        elif (_dict[UP][0]   in vert_list) and (self.TOKEN_CROSS == pixel) and  (_dict[RIGHT][0] == self.TOKEN_GRAPH_DOWN) : pixel = self.ASCII_CORN_DOWN_LEFT  # └
+        elif (_dict[DOWN][0] in vert_list) and (self.TOKEN_CROSS == pixel) and  (_dict[RIGHT][0] == self.TOKEN_GRAPH_UP)   : pixel = self.ASCII_CORN_UP_LEFT    # ┌
+        elif (_dict[DOWN][0] in vert_list) and (self.TOKEN_CROSS == pixel) and  (_dict[RIGHT][0] == self.TOKEN_GRAPH_DOWN) : pixel = self.ASCII_CORN_UP_LEFT    # ┌
+
+        elif (_dict[UP][0]   in vert_list) and (_dict[LEFT][0]  == self.TOKEN_GRAPH_UP)   and (self.TOKEN_CROSS == pixel)  : pixel = self.ASCII_CORN_DOWN_RIGHT # ┘
+        elif (_dict[UP][0]   in vert_list) and (_dict[LEFT][0]  == self.TOKEN_GRAPH_DOWN) and (self.TOKEN_CROSS == pixel)  : pixel = self.ASCII_CORN_DOWN_RIGHT # ┘
+        elif (_dict[DOWN][0] in vert_list) and (_dict[LEFT][0]  == self.TOKEN_GRAPH_UP)   and (self.TOKEN_CROSS == pixel)  : pixel = self.ASCII_CORN_UP_RIGHT   # ┐
+        elif (_dict[DOWN][0] in vert_list) and (_dict[LEFT][0]  == self.TOKEN_GRAPH_DOWN) and (self.TOKEN_CROSS == pixel)  : pixel = self.ASCII_CORN_UP_RIGHT   # ┐
+
+        else: pixel = None
         return pixel
 
 
     # ----------------------------------------
     def pixel_update(self, func):
-        out_list = list()
-        row_size = len(self.data_list)
+        #out_list = list()
+        row_size = len(self.in_list)
         # for all rows
         for row_cnt in range(0, row_size):
-            in_str = self.data_list[row_cnt]
+            in_str = self.in_list[row_cnt]
             col_size = len(in_str)
             _str = ""
             # for all chars
             for col_cnt in range(0, col_size):
                 _dict = self.pixel_surrounding_get_dict(row_cnt, col_cnt, 2)
-                pixel_old = self.data_list[row_cnt][col_cnt]
+                pixel_old = self.in_list[row_cnt][col_cnt]
                 pixel_new = func(pixel_old, _dict)
+                if pixel_new is None:
+                    pixel_new = self.out_list[row_cnt][col_cnt]
                 _str = _str + pixel_new
-            out_list.append(_str)
-        self.data_list = out_list
+                #self.out_list[row_cnt][col_cnt] = pixel_new
+            self.out_list[row_cnt] = _str
+            #out_list.append(_str)
+        #self.out_list = out_list
 
 
     # ----------------------------------------
@@ -826,13 +801,15 @@ class Ascii(object):
     # ----------------------------------------
     def convert_get_list(self, file_path_str):
         _list = parse_file_get_list(file_path_str)
-        self.data_list = self.clean_up_get_list(_list)
+        self.in_list = self.clean_up_get_list(_list)
+        self.out_list = self.in_list.copy()
         self.pixel_update(self.line_token_to_ascii_get_pixel)
         self.pixel_update(self.condition_token_to_ascii_get_pixel)
         self.pixel_update(self.arrow_token_to_ascii_get_pixel)
         self.pixel_update(self.block_token_to_ascii_get_pixel)
         self.pixel_update(self.misc_token_to_ascii_get_pixel)
-        return self.data_list
+        self.pixel_update(self.misc_graph_to_ascii_get_pixel)
+        return self.out_list
 
 
     # ----------------------------------------
