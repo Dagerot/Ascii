@@ -878,7 +878,7 @@ def main():
     )
 
     parser.add_argument('-i', '--in_file',    required = True,  type=str, help = 'input file: Usage: -i Xxx.txt')
-    parser.add_argument('-o', '--out_file',   required = False, type=str, help = 'output file: Usage: -i Yyy.txt')
+    parser.add_argument('-o', '--out_file',   required = False, type=str, help = 'output file: Usage: -o Yyy.txt')
     parser.add_argument('-a', '--anti_ascii', required = False, action = 'store_true', help = 'undo ascii conversion')
     parser.add_argument('-v', '--version',                      action = 'version', version = _name_ + ' v' + _ver_)
 
