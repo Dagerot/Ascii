@@ -108,6 +108,33 @@ class RawFormatter(argparse.HelpFormatter):
         return "\n".join([textwrap.fill(line, width) for line in textwrap.indent(textwrap.dedent(text), indent).splitlines()])
 
 
+# -----------------------------
+_name_ = os.path.basename(sys.argv[0])
+_ver_ = '1.1'
+_use_ = '%(prog)s -i <input file> -o <output file>'
+_note_ = '''
+    Genreate UTF-8 graphics from ASCII
+'''
+
+
+# ----------------------------------------
+def parse_get_arguments():
+    parser = argparse.ArgumentParser(
+        prog        = _name_,
+        usage       = _use_,
+        description = _note_, formatter_class = RawFormatter,
+    )
+
+    parser.add_argument('-i', '--in_file',    required = True,  type=str, help = 'input file: Usage: -i Xxx.txt')
+    parser.add_argument('-o', '--out_file',   required = False, type=str, help = 'output file: Usage: -o Yyy.txt')
+    parser.add_argument('-a', '--anti_ascii', required = False, action = 'store_true', help = 'undo ascii conversion')
+    parser.add_argument('-v', '--version',                      action = 'version', version = _name_ + ' v' + _ver_)
+
+    args = parser.parse_args()
+
+    return args
+
+
 # ----------------------------------------
 def file_remove(file_name_str):
     if os.path.isfile(file_name_str):
@@ -857,37 +884,16 @@ def print_to_screen(_list):
        print(_str)
 
 
-# -----------------------------
-_name_ = os.path.basename(sys.argv[0])
-_ver_ = '1.1'
-_use_ = '%(prog)s -i <input file> -o <output file>'
-_note_ = '''
-    Genreate UTF-8 graphics from ASCII
-'''
-
-
 # ----------------------------------------
 def main():
     obj = Ascii()
 
-    # handle arguments
-    parser = argparse.ArgumentParser(
-        prog        = _name_,
-        usage       = _use_,
-        description = _note_, formatter_class = RawFormatter,
-    )
+    arg = parse_get_arguments()
 
-    parser.add_argument('-i', '--in_file',    required = True,  type=str, help = 'input file: Usage: -i Xxx.txt')
-    parser.add_argument('-o', '--out_file',   required = False, type=str, help = 'output file: Usage: -o Yyy.txt')
-    parser.add_argument('-a', '--anti_ascii', required = False, action = 'store_true', help = 'undo ascii conversion')
-    parser.add_argument('-v', '--version',                      action = 'version', version = _name_ + ' v' + _ver_)
+    in_file_str = str(arg.in_file)
 
-    args = parser.parse_args()
-
-    in_file_str = str(args.in_file)
-
-    if args.out_file is not None:
-        out_file_str = str(args.out_file)
+    if arg.out_file is not None:
+        out_file_str = str(arg.out_file)
     else:
         pos = in_file_str.find(".")
         name_str = in_file_str[:pos]
@@ -901,7 +907,7 @@ def main():
     print(INDENT_STR + 'Removing: ' + out_file_str)
     file_remove(out_file_str)
 
-    if args.anti_ascii:
+    if arg.anti_ascii:
         _list = obj.anti_convert_get_list(in_file_str)
     else:
         _list = obj.convert_get_list(in_file_str)
