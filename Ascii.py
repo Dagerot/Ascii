@@ -228,7 +228,7 @@ class Ascii(object):
     ASCII_b_LINE_VERT_bT_RIGHT  = "╠"
 
     #ASCII_d_LINE_HORI           = "­"  # 0xF0
-    ASCII_d_LINE_HORI           = "─"  # confluence cant handle 0xF0
+    ASCII_d_LINE_HORI           = "-"  # confluence cant handle 0xF0
     ASCII_d_LINE_VERT           = "¦"  # 0xDD
     ASCII_d_CROSS               = "+"
     ASCII_d_CORN_UP_LEFT        = "."
